@@ -283,7 +283,7 @@ const ProductCard = ({ product, onBuyClick }) => {
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.8 }}
-          className="font-display text-[22vw] md:text-[18vw] lg:text-[16vw] text-brand-text opacity-10 whitespace-nowrap select-none leading-none"
+          className="font-display text-[18vw] md:text-[14vw] lg:text-[12vw] text-brand-text/[0.06] whitespace-nowrap select-none leading-none"
         >
           {product.bgWord}
         </motion.span>

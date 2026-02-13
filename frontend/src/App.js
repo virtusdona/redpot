@@ -12,11 +12,11 @@ import "./App.css";
 // Constants for buy links
 const BUY_LINK = "PLACEHOLDER_LINK";
 
-// Asset URLs
+// Asset URLs - using local public folder
 const ASSETS = {
-  logoVideo: "https://customer-assets.emergentagent.com/job_65e85e7a-4b3f-463c-875b-799d45d15f52/artifacts/aiivcbzs_logo%20animation.mp4",
-  soloSlider: "https://customer-assets.emergentagent.com/job_65e85e7a-4b3f-463c-875b-799d45d15f52/artifacts/4act7ccw_CEF52839-401F-4035-BC93-614EFBA9D758%20%281%29.png",
-  doubleSlider: "https://customer-assets.emergentagent.com/job_65e85e7a-4b3f-463c-875b-799d45d15f52/artifacts/ukqabhve_57737FF7-8A98-4767-80A5-C518AC6B3499%20%281%29%20%281%29.png",
+  logoVideo: "/logo-animation.mp4",
+  soloSlider: "/solo-slider.png",
+  doubleSlider: "/double-slider.png",
 };
 
 // Products data

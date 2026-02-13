@@ -8,12 +8,12 @@ module.exports = {
   theme: {
         extend: {
                 fontFamily: {
-                        'display': ['Anton', 'sans-serif'],
-                        'heading': ['Oswald', 'sans-serif'],
-                        'body': ['Manrope', 'sans-serif'],
+                        'header': ['"Hammersmith One"', 'sans-serif'],
+                        'display': ['"Dela Gothic One"', 'sans-serif'],
+                        'body': ['"Doppio One"', 'sans-serif'],
                 },
                 colors: {
-                        'brand-bg': '#2C2C2C',
+                        'brand-bg': '#141311',
                         'brand-red': '#E44720',
                         'brand-gold': '#EAC783',
                         'brand-text': '#FFEBE6',

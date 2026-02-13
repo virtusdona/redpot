@@ -12,9 +12,9 @@ import "./App.css";
 // Constants for buy links
 const BUY_LINK = "PLACEHOLDER_LINK";
 
-// Asset URLs - using local public folder
+// Asset URLs - using original URLs with proper encoding
 const ASSETS = {
-  logoVideo: "/logo-animation.mp4",
+  logoVideo: "https://customer-assets.emergentagent.com/job_65e85e7a-4b3f-463c-875b-799d45d15f52/artifacts/aiivcbzs_logo%20animation.mp4",
   soloSlider: "/solo-slider.png",
   doubleSlider: "/double-slider.png",
 };
@@ -157,10 +157,35 @@ const Navigation = ({ activeSection }) => {
 // Hero Section Component
 const HeroSection = () => {
   const [animationStarted, setAnimationStarted] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setAnimationStarted(true), 100);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Handle video loading
+  useEffect(() => {
+    if (videoRef.current) {
+      const video = videoRef.current;
+      
+      const handleCanPlay = () => {
+        video.play().catch(() => setVideoError(true));
+      };
+      
+      const handleError = () => {
+        setVideoError(true);
+      };
+      
+      video.addEventListener('canplay', handleCanPlay);
+      video.addEventListener('error', handleError);
+      
+      return () => {
+        video.removeEventListener('canplay', handleCanPlay);
+        video.removeEventListener('error', handleError);
+      };
+    }
   }, []);
 
   return (
@@ -176,15 +201,27 @@ const HeroSection = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 mb-6"
       >
-        <video
-          data-testid="logo-video"
-          src={ASSETS.logoVideo}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-contain"
-        />
+        {!videoError ? (
+          <video
+            ref={videoRef}
+            data-testid="logo-video"
+            src={ASSETS.logoVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-contain"
+            onError={() => setVideoError(true)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full bg-brand-red/20 flex items-center justify-center mb-2">
+                <span className="font-display text-4xl md:text-5xl text-brand-red">RP</span>
+              </div>
+            </div>
+          </div>
+        )}
       </motion.div>
 
       {/* BIRRIA BOMB Text */}

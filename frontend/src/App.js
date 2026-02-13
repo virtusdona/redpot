@@ -14,7 +14,7 @@ const BUY_LINK = "PLACEHOLDER_LINK";
 
 // Asset URLs
 const ASSETS = {
-  logoVideo: "/logo-video.mp4",
+  logoVideo: "https://customer-assets.emergentagent.com/job_birria-heaven/artifacts/0zfc98xe_Untitled%20design.mp4",
   soloSlider: "/solo-slider.png",
   doubleSlider: "/double-slider.png",
 };

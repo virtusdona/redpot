@@ -277,13 +277,13 @@ const ProductCard = ({ product, onBuyClick }) => {
       data-testid={`product-card-${product.id}`}
       className="relative min-h-[80vh] flex items-center overflow-hidden py-12 md:py-20"
     >
-      {/* Background Word - Overlapping, visible, bigger than image */}
+      {/* Background Word - Lower opacity, smaller */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <motion.span
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.8 }}
-          className="font-display text-[35vw] md:text-[28vw] lg:text-[24vw] text-brand-text opacity-20 whitespace-nowrap select-none leading-none"
+          className="font-display text-[22vw] md:text-[18vw] lg:text-[16vw] text-brand-text opacity-10 whitespace-nowrap select-none leading-none"
         >
           {product.bgWord}
         </motion.span>
@@ -310,7 +310,7 @@ const ProductCard = ({ product, onBuyClick }) => {
             </button>
           </motion.div>
 
-          {/* Center - Product Image */}
+          {/* Center - Product Image - Bigger and centered */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
@@ -320,7 +320,7 @@ const ProductCard = ({ product, onBuyClick }) => {
             <img
               src={product.image}
               alt={product.name}
-              className="w-full max-w-md object-contain"
+              className="w-full max-w-lg object-contain"
               loading="lazy"
             />
           </motion.div>
@@ -345,7 +345,7 @@ const ProductCard = ({ product, onBuyClick }) => {
 
         {/* Mobile Layout: Image → Name with underline → Description → Price → BUY NOW */}
         <div className="md:hidden flex flex-col items-center text-center">
-          {/* Product Image */}
+          {/* Product Image - Bigger and centered */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
@@ -355,7 +355,7 @@ const ProductCard = ({ product, onBuyClick }) => {
             <img
               src={product.image}
               alt={product.name}
-              className="w-full max-w-xs object-contain mx-auto"
+              className="w-full max-w-sm object-contain mx-auto"
               loading="lazy"
             />
           </motion.div>

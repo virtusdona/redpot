@@ -224,10 +224,13 @@ const HeroSection = () => {
             ref={videoRef}
             data-testid="logo-video"
             src={ASSETS.logoVideo}
+            autoPlay
             muted
             playsInline
+            preload="auto"
             className="w-full h-auto object-contain"
             onError={() => setVideoError(true)}
+            onLoadedData={(e) => e.target.play()}
           />
         ) : (
           /* Fallback when video doesn't load */

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { ShoppingCart, X, Menu } from "lucide-react";
 import {
   Dialog,
@@ -12,9 +12,9 @@ import "./App.css";
 // Constants for buy links
 const BUY_LINK = "PLACEHOLDER_LINK";
 
-// Asset URLs - using original URLs with proper encoding
+// Asset URLs
 const ASSETS = {
-  logoVideo: "https://customer-assets.emergentagent.com/job_65e85e7a-4b3f-463c-875b-799d45d15f52/artifacts/aiivcbzs_logo%20animation.mp4",
+  logoVideo: "/logo-video.mp4",
   soloSlider: "/solo-slider.png",
   doubleSlider: "/double-slider.png",
 };
@@ -60,51 +60,58 @@ const Navigation = ({ activeSection }) => {
     setMobileMenuOpen(false);
   };
 
-  const navLinks = [
-    { id: "home", label: "Home" },
-    { id: "order", label: "Order" },
-    { id: "about", label: "About" },
-  ];
-
   return (
     <nav
       data-testid="main-navigation"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-brand-bg/95 backdrop-blur-sm shadow-lg" : "bg-transparent"
+        scrolled ? "bg-brand-bg/95 backdrop-blur-sm" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <button
             data-testid="nav-logo"
             onClick={() => scrollToSection("home")}
-            className="font-heading font-bold text-xl md:text-2xl text-brand-red tracking-wider hover:brightness-110 transition-all"
+            className="font-header text-lg md:text-xl text-brand-red tracking-wide hover:brightness-110 transition-all"
           >
             RED POT
           </button>
 
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.slice(1).map((link) => (
-              <button
-                key={link.id}
-                data-testid={`nav-link-${link.id}`}
-                onClick={() => scrollToSection(link.id)}
-                className="relative font-heading text-sm tracking-wider text-brand-text hover:text-brand-white transition-colors group"
-              >
-                {link.label}
-                <span
-                  className={`absolute -bottom-1 left-0 h-0.5 bg-brand-red transition-all duration-300 ${
-                    activeSection === link.id ? "w-full" : "w-0 group-hover:w-full"
-                  }`}
-                />
-              </button>
-            ))}
+            <button
+              data-testid="nav-link-order"
+              onClick={() => scrollToSection("order")}
+              className={`relative font-header text-sm tracking-wide transition-colors ${
+                activeSection === "order" ? "text-brand-white" : "text-brand-text hover:text-brand-white"
+              }`}
+            >
+              Order
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-brand-red transition-all duration-300 ${
+                  activeSection === "order" ? "w-full" : "w-0"
+                }`}
+              />
+            </button>
+            <button
+              data-testid="nav-link-about"
+              onClick={() => scrollToSection("about")}
+              className={`relative font-header text-sm tracking-wide transition-colors ${
+                activeSection === "about" ? "text-brand-white" : "text-brand-text hover:text-brand-white"
+              }`}
+            >
+              About
+              <span
+                className={`absolute -bottom-1 left-0 h-0.5 bg-brand-red transition-all duration-300 ${
+                  activeSection === "about" ? "w-full" : "w-0"
+                }`}
+              />
+            </button>
           </div>
 
-          {/* Cart Icon (Visual Only) */}
-          <div className="flex items-center space-x-4">
+          {/* Right side - Cart & Mobile Menu */}
+          <div className="flex items-center gap-4">
             <button
               data-testid="cart-icon"
               className="text-brand-text hover:text-brand-white transition-colors"
@@ -126,29 +133,24 @@ const Navigation = ({ activeSection }) => {
         </div>
 
         {/* Mobile Menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden overflow-hidden bg-brand-bg/95 backdrop-blur-sm"
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-brand-bg/95 backdrop-blur-sm py-4">
+            <button
+              data-testid="mobile-nav-link-order"
+              onClick={() => scrollToSection("order")}
+              className="block w-full text-left font-header text-sm tracking-wide text-brand-text hover:text-brand-red transition-colors py-2"
             >
-              <div className="py-4 space-y-4">
-                {navLinks.map((link) => (
-                  <button
-                    key={link.id}
-                    data-testid={`mobile-nav-link-${link.id}`}
-                    onClick={() => scrollToSection(link.id)}
-                    className="block w-full text-left font-heading text-sm tracking-wider text-brand-text hover:text-brand-red transition-colors py-2"
-                  >
-                    {link.label}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              Order
+            </button>
+            <button
+              data-testid="mobile-nav-link-about"
+              onClick={() => scrollToSection("about")}
+              className="block w-full text-left font-header text-sm tracking-wide text-brand-text hover:text-brand-red transition-colors py-2"
+            >
+              About
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   );
@@ -157,7 +159,6 @@ const Navigation = ({ activeSection }) => {
 // Hero Section Component
 const HeroSection = () => {
   const [animationStarted, setAnimationStarted] = useState(false);
-  const [videoError, setVideoError] = useState(false);
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -165,26 +166,11 @@ const HeroSection = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Handle video loading
+  // Handle video - don't loop, stay on last frame
   useEffect(() => {
     if (videoRef.current) {
       const video = videoRef.current;
-      
-      const handleCanPlay = () => {
-        video.play().catch(() => setVideoError(true));
-      };
-      
-      const handleError = () => {
-        setVideoError(true);
-      };
-      
-      video.addEventListener('canplay', handleCanPlay);
-      video.addEventListener('error', handleError);
-      
-      return () => {
-        video.removeEventListener('canplay', handleCanPlay);
-        video.removeEventListener('error', handleError);
-      };
+      video.play().catch(() => {});
     }
   }, []);
 
@@ -194,34 +180,21 @@ const HeroSection = () => {
       data-testid="hero-section"
       className="min-h-screen flex flex-col items-center justify-center px-6"
     >
-      {/* Video Logo */}
+      {/* Video Logo - 1080px wide, no loop */}
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
         animate={animationStarted ? { opacity: 1, scale: 1 } : {}}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 mb-6"
+        className="w-full max-w-[1080px] mb-6"
       >
-        {!videoError ? (
-          <video
-            ref={videoRef}
-            data-testid="logo-video"
-            src={ASSETS.logoVideo}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-contain"
-            onError={() => setVideoError(true)}
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-32 h-32 md:w-40 md:h-40 mx-auto rounded-full bg-brand-red/20 flex items-center justify-center mb-2">
-                <span className="font-display text-4xl md:text-5xl text-brand-red">RP</span>
-              </div>
-            </div>
-          </div>
-        )}
+        <video
+          ref={videoRef}
+          data-testid="logo-video"
+          src={ASSETS.logoVideo}
+          muted
+          playsInline
+          className="w-full h-auto object-contain"
+        />
       </motion.div>
 
       {/* BIRRIA BOMB Text */}
@@ -248,25 +221,24 @@ const HeroSection = () => {
   );
 };
 
-// Product Card Component
-const ProductCard = ({ product, index, onBuyClick }) => {
+// Product Card Component - Matching exact reference layout
+const ProductCard = ({ product, onBuyClick }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const isEven = index % 2 === 0;
 
   return (
     <div
       ref={ref}
       data-testid={`product-card-${product.id}`}
-      className="relative min-h-[80vh] flex items-center overflow-hidden py-16 md:py-24"
+      className="relative min-h-[80vh] flex items-center overflow-hidden py-12 md:py-20"
     >
-      {/* Background Word */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+      {/* Background Word - Overlapping, visible, bigger than image */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <motion.span
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={isInView ? { opacity: 0.08, scale: 1 } : {}}
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.8 }}
-          className="font-display text-[20vw] md:text-[18vw] text-brand-text whitespace-nowrap select-none"
+          className="font-display text-[28vw] md:text-[22vw] lg:text-[20vw] text-brand-text/20 whitespace-nowrap select-none leading-none"
         >
           {product.bgWord}
         </motion.span>
@@ -274,19 +246,20 @@ const ProductCard = ({ product, index, onBuyClick }) => {
 
       {/* Content Container */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">
-        {/* Desktop Layout */}
+        
+        {/* Desktop Layout: BUY NOW left, Image center, Info right */}
         <div className="hidden md:flex md:items-center md:justify-between gap-8">
-          {/* Left Side - Button */}
+          {/* Left - BUY NOW Button */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             className="flex-shrink-0"
           >
             <button
               data-testid={`buy-now-${product.id}`}
               onClick={() => onBuyClick(product)}
-              className="bg-brand-red text-brand-text font-heading font-bold tracking-wider px-10 py-3 rounded-sm hover:brightness-110 transition-all transform hover:scale-105"
+              className="bg-brand-red text-brand-text font-body font-normal tracking-wide px-10 py-3 rounded-full hover:brightness-110 transition-all"
             >
               BUY NOW
             </button>
@@ -294,68 +267,95 @@ const ProductCard = ({ product, index, onBuyClick }) => {
 
           {/* Center - Product Image */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.6 }}
-            className="flex-1 flex justify-center"
+            className="flex-1 flex justify-center relative z-20"
           >
             <img
               src={product.image}
               alt={product.name}
-              className="w-full max-w-sm object-contain drop-shadow-2xl"
+              className="w-full max-w-md object-contain"
               loading="lazy"
             />
           </motion.div>
 
-          {/* Right Side - Product Info */}
+          {/* Right - Product Info */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
             className="flex-shrink-0 max-w-xs text-right"
           >
-            <p className="text-brand-gold font-heading text-xl mb-1">{product.price}</p>
-            <h3 className="font-heading font-bold text-2xl text-brand-white mb-4">{product.name}</h3>
-            <p className="font-body text-sm text-brand-text leading-relaxed">{product.description}</p>
+            <p className="text-brand-gold font-body text-lg mb-1">{product.price}</p>
+            <h3 className="font-body text-xl text-brand-white mb-1 inline-block">
+              {product.name}
+              <span className="block h-0.5 bg-brand-gold mt-1"></span>
+            </h3>
+            <p className="font-body text-sm text-brand-text leading-relaxed mt-3">
+              {product.description}
+            </p>
           </motion.div>
         </div>
 
-        {/* Mobile Layout */}
+        {/* Mobile Layout: Image → Name with underline → Description → Price → BUY NOW */}
         <div className="md:hidden flex flex-col items-center text-center">
+          {/* Product Image */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.6 }}
-            className="mb-6"
+            className="mb-6 relative z-20"
           >
             <img
               src={product.image}
               alt={product.name}
-              className="w-full max-w-xs object-contain drop-shadow-2xl mx-auto"
+              className="w-full max-w-xs object-contain mx-auto"
               loading="lazy"
             />
           </motion.div>
 
+          {/* Product Name with Gold Underline */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-6"
+            className="mb-4"
           >
-            <h3 className="font-heading font-bold text-xl text-brand-white mb-2">{product.name}</h3>
-            <p className="font-body text-sm text-brand-text leading-relaxed mb-4 px-4">
-              {product.description}
-            </p>
-            <p className="text-brand-gold font-heading text-xl">{product.price}</p>
+            <h3 className="font-body text-xl text-brand-white inline-block">
+              {product.name}
+              <span className="block h-0.5 bg-brand-gold mt-1"></span>
+            </h3>
           </motion.div>
 
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.25 }}
+            className="font-body text-sm text-brand-text leading-relaxed mb-4 px-4 max-w-sm"
+          >
+            {product.description}
+          </motion.p>
+
+          {/* Price */}
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.3 }}
+            className="text-brand-gold font-body text-lg mb-6"
+          >
+            {product.price}
+          </motion.p>
+
+          {/* BUY NOW Button */}
+          <motion.button
+            initial={{ opacity: 0, y: 15 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.35 }}
             data-testid={`buy-now-mobile-${product.id}`}
             onClick={() => onBuyClick(product)}
-            className="bg-brand-red text-brand-text font-heading font-bold tracking-wider px-8 py-3 rounded-sm hover:brightness-110 transition-all"
+            className="bg-brand-red text-brand-text font-body tracking-wide px-10 py-3 rounded-full hover:brightness-110 transition-all"
           >
             BUY NOW
           </motion.button>
@@ -369,11 +369,10 @@ const ProductCard = ({ product, index, onBuyClick }) => {
 const OrderSection = ({ onBuyClick }) => {
   return (
     <section id="order" data-testid="order-section" className="py-8">
-      {PRODUCTS.map((product, index) => (
+      {PRODUCTS.map((product) => (
         <ProductCard
           key={product.id}
           product={product}
-          index={index}
           onBuyClick={onBuyClick}
         />
       ))}
@@ -399,7 +398,7 @@ const AboutSection = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           data-testid="about-title"
-          className="font-heading font-bold text-2xl md:text-3xl text-brand-white mb-8 text-center"
+          className="font-body text-2xl md:text-3xl text-brand-white mb-8 text-center"
         >
           About Red Pot Kitchen
         </motion.h2>
@@ -428,7 +427,7 @@ const AboutSection = () => {
 // Footer Component
 const Footer = () => {
   return (
-    <footer data-testid="footer" className="py-8 border-t border-brand-bg/50">
+    <footer data-testid="footer" className="py-8 border-t border-brand-text/10">
       <div className="max-w-7xl mx-auto px-6 md:px-12 text-center">
         <p className="font-body text-xs text-brand-text/60">
           &copy; {new Date().getFullYear()} Red Pot Kitchen. All rights reserved.
@@ -454,18 +453,17 @@ const OrderModal = ({ isOpen, onClose, product }) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         data-testid="order-modal"
-        className="bg-brand-bg border-brand-bg/50 max-w-2xl w-[90vw]"
+        className="bg-brand-bg border-brand-text/20 max-w-2xl w-[90vw]"
       >
         <DialogHeader>
-          <DialogTitle className="font-heading text-brand-white text-xl">
+          <DialogTitle className="font-body text-brand-white text-xl">
             Order {product?.name}
           </DialogTitle>
         </DialogHeader>
         <div className="mt-4">
-          {/* Iframe placeholder for Tally form */}
           <div
             data-testid="order-form-placeholder"
-            className="w-full h-96 bg-brand-bg/50 border border-brand-text/10 rounded-sm flex items-center justify-center"
+            className="w-full h-96 bg-brand-bg/50 border border-brand-text/10 rounded flex items-center justify-center"
           >
             <div className="text-center">
               <p className="font-body text-brand-text/60 mb-2">Order Form</p>

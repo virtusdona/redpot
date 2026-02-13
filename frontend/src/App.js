@@ -159,6 +159,8 @@ const Navigation = ({ activeSection }) => {
 // Hero Section Component
 const HeroSection = () => {
   const [animationStarted, setAnimationStarted] = useState(false);
+  const [videoError, setVideoError] = useState(false);
+  const [videoEnded, setVideoEnded] = useState(false);
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -170,7 +172,37 @@ const HeroSection = () => {
   useEffect(() => {
     if (videoRef.current) {
       const video = videoRef.current;
-      video.play().catch(() => {});
+      
+      const handleCanPlay = () => {
+        video.play().catch(() => setVideoError(true));
+      };
+      
+      const handleEnded = () => {
+        setVideoEnded(true);
+        // Keep showing the last frame - video stays paused at end
+      };
+      
+      const handleError = () => {
+        setVideoError(true);
+      };
+      
+      video.addEventListener('canplay', handleCanPlay);
+      video.addEventListener('ended', handleEnded);
+      video.addEventListener('error', handleError);
+      
+      // Set a timeout - if video doesn't load in 3 seconds, show fallback
+      const timeout = setTimeout(() => {
+        if (video.readyState < 2) {
+          setVideoError(true);
+        }
+      }, 3000);
+      
+      return () => {
+        video.removeEventListener('canplay', handleCanPlay);
+        video.removeEventListener('ended', handleEnded);
+        video.removeEventListener('error', handleError);
+        clearTimeout(timeout);
+      };
     }
   }, []);
 
@@ -187,14 +219,24 @@ const HeroSection = () => {
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="w-full max-w-[1080px] mb-6"
       >
-        <video
-          ref={videoRef}
-          data-testid="logo-video"
-          src={ASSETS.logoVideo}
-          muted
-          playsInline
-          className="w-full h-auto object-contain"
-        />
+        {!videoError ? (
+          <video
+            ref={videoRef}
+            data-testid="logo-video"
+            src={ASSETS.logoVideo}
+            muted
+            playsInline
+            className="w-full h-auto object-contain"
+            onError={() => setVideoError(true)}
+          />
+        ) : (
+          /* Fallback when video doesn't load */
+          <div className="w-full flex items-center justify-center py-20">
+            <div className="text-center">
+              <span className="font-display text-6xl md:text-8xl text-brand-red">RED POT</span>
+            </div>
+          </div>
+        )}
       </motion.div>
 
       {/* BIRRIA BOMB Text */}

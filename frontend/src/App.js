@@ -275,50 +275,50 @@ const ProductCard = ({ product, index, onBuyClick }) => {
       {/* Content Container */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">
         {/* Desktop Layout */}
-        <div className={`hidden md:grid md:grid-cols-2 gap-8 items-center ${isEven ? "" : "direction-rtl"}`}>
-          {/* Button Side (Left on even, Right on odd) */}
+        <div className="hidden md:flex md:items-center md:justify-between gap-8">
+          {/* Left Side - Button */}
           <motion.div
-            initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+            initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className={`flex flex-col items-center ${isEven ? "md:items-start" : "md:items-end"}`}
+            className="flex-shrink-0"
           >
             <button
               data-testid={`buy-now-${product.id}`}
               onClick={() => onBuyClick(product)}
-              className="bg-brand-red text-brand-text font-heading font-bold tracking-wider px-8 py-3 rounded-sm hover:brightness-110 transition-all transform hover:scale-105"
+              className="bg-brand-red text-brand-text font-heading font-bold tracking-wider px-10 py-3 rounded-sm hover:brightness-110 transition-all transform hover:scale-105"
             >
               BUY NOW
             </button>
           </motion.div>
 
-          {/* Product Image (Center) */}
+          {/* Center - Product Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.6 }}
-            className="flex justify-center"
+            className="flex-1 flex justify-center"
           >
             <img
               src={product.image}
               alt={product.name}
-              className="w-full max-w-md object-contain drop-shadow-2xl"
+              className="w-full max-w-sm object-contain drop-shadow-2xl"
               loading="lazy"
             />
           </motion.div>
-        </div>
 
-        {/* Desktop Right Side Info */}
-        <motion.div
-          initial={{ opacity: 0, x: isEven ? 50 : -50 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className={`hidden md:block absolute ${isEven ? "right-12" : "left-12"} top-1/2 -translate-y-1/2 max-w-xs`}
-        >
-          <p className="text-brand-gold font-heading text-lg mb-2">{product.price}</p>
-          <h3 className="font-heading font-bold text-2xl text-brand-white mb-4">{product.name}</h3>
-          <p className="font-body text-sm text-brand-text leading-relaxed">{product.description}</p>
-        </motion.div>
+          {/* Right Side - Product Info */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="flex-shrink-0 max-w-xs text-right"
+          >
+            <p className="text-brand-gold font-heading text-xl mb-1">{product.price}</p>
+            <h3 className="font-heading font-bold text-2xl text-brand-white mb-4">{product.name}</h3>
+            <p className="font-body text-sm text-brand-text leading-relaxed">{product.description}</p>
+          </motion.div>
+        </div>
 
         {/* Mobile Layout */}
         <div className="md:hidden flex flex-col items-center text-center">
@@ -346,7 +346,7 @@ const ProductCard = ({ product, index, onBuyClick }) => {
             <p className="font-body text-sm text-brand-text leading-relaxed mb-4 px-4">
               {product.description}
             </p>
-            <p className="text-brand-gold font-heading text-lg">{product.price}</p>
+            <p className="text-brand-gold font-heading text-xl">{product.price}</p>
           </motion.div>
 
           <motion.button

@@ -10,7 +10,7 @@ import {
 import "./App.css";
 
 // Constants for buy links
-const BUY_LINK = "PLACEHOLDER_LINK";
+const BUY_LINK = "https://tally.so/r/Y5WKL0";
 
 // Asset URLs
 const ASSETS = {

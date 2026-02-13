@@ -85,8 +85,8 @@ const Navigation = ({ activeSection }) => {
           </button>
 
           {/* Desktop Nav Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.slice(1).map((link) => (
               <button
                 key={link.id}
                 data-testid={`nav-link-${link.id}`}
@@ -167,14 +167,14 @@ const HeroSection = () => {
     <section
       id="home"
       data-testid="hero-section"
-      className="min-h-screen flex flex-col items-center justify-center px-6 pt-20"
+      className="min-h-screen flex flex-col items-center justify-center px-6"
     >
       {/* Video Logo */}
       <motion.div
         initial={{ opacity: 0, scale: 0.96 }}
         animate={animationStarted ? { opacity: 1, scale: 1 } : {}}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="w-64 h-64 md:w-80 md:h-80 mb-8"
+        className="w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 mb-6"
       >
         <video
           data-testid="logo-video"
@@ -196,7 +196,7 @@ const HeroSection = () => {
       >
         <h1
           data-testid="hero-title"
-          className="font-display text-4xl md:text-5xl lg:text-6xl text-brand-red tracking-wider"
+          className="font-display text-3xl md:text-4xl lg:text-5xl text-brand-red tracking-wider"
         >
           BIRRIA BOMB
         </h1>

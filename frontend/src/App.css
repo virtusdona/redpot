@@ -1,17 +1,12 @@
 /* Red Pot Kitchen - Birria Bomb Landing Page Styles */
 
-/* Direction utility for RTL layout in product cards */
-.direction-rtl {
-  direction: rtl;
-}
-
-.direction-rtl > * {
-  direction: ltr;
-}
-
-/* Video styling */
+/* Ensure video doesn't show controls and stays on last frame */
 video {
   background: transparent;
+}
+
+video::-webkit-media-controls {
+  display: none !important;
 }
 
 /* Smooth transitions for all interactive elements */
@@ -27,7 +22,7 @@ img {
 
 /* Modal overlay enhancement */
 [data-radix-dialog-overlay] {
-  background-color: rgba(44, 44, 44, 0.9) !important;
+  background-color: rgba(20, 19, 17, 0.9) !important;
 }
 
 /* Custom focus states */
@@ -41,40 +36,6 @@ a:focus-visible {
 .select-none {
   user-select: none;
   -webkit-user-select: none;
-}
-
-/* Drop shadow enhancement for product images */
-.drop-shadow-2xl {
-  filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.5));
-}
-
-/* Animation for nav links underline */
-@keyframes underline-grow {
-  from {
-    width: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  to {
-    width: 100%;
-    left: 0;
-    transform: translateX(0);
-  }
-}
-
-/* Background word styling enhancement */
-.bg-word {
-  font-size: clamp(8rem, 20vw, 18rem);
-  line-height: 1;
-  opacity: 0.08;
-  color: #FFEBE6;
-}
-
-/* Mobile optimizations */
-@media (max-width: 768px) {
-  .bg-word {
-    font-size: clamp(5rem, 25vw, 10rem);
-  }
 }
 
 /* Ensure dialog close button visibility */
